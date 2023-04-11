@@ -1,10 +1,9 @@
-package ru.practicum.shareit.item.mapper;
+package ru.practicum.shareit.item;
 
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.model.Item;
 
 /**
- * Item mapper class.
+ * Item mapper.
  */
 public class ItemMapper {
 

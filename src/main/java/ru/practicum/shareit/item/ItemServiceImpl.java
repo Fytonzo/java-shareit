@@ -1,16 +1,19 @@
-package ru.practicum.shareit.item.service;
+package ru.practicum.shareit.item;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.mapper.ItemMapper;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.storage.ItemStorage;
-import ru.practicum.shareit.user.storage.UserStorage;
+import ru.practicum.shareit.item.interfaces.ItemService;
+import ru.practicum.shareit.item.interfaces.ItemStorage;
+import ru.practicum.shareit.user.interfaces.UserStorage;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Item service implementation.
+ */
 @Service
 public class ItemServiceImpl implements ItemService {
 
@@ -35,7 +38,21 @@ public class ItemServiceImpl implements ItemService {
         Item itemToUpdate = ItemMapper.dtoToItem(itemDto);
         itemToUpdate.setId(itemId);
         itemToUpdate.setOwner(userStorage.getUserById(userId));
-        itemStorage.updateItem(itemToUpdate);
+        Item updatedItem = itemStorage.getItemById(itemToUpdate.getId());
+        if ((updatedItem.getOwner().getId()) != (itemToUpdate.getOwner().getId())) {
+            throw new EntityNotFoundException("Пользователь с id = " + updatedItem.getOwner().getId()
+                    + " не владеет такой вещью!");
+        }
+        if (itemToUpdate.getAvailable() != null) {
+            updatedItem.setAvailable(itemToUpdate.getAvailable());
+        }
+        if (itemToUpdate.getDescription() != null) {
+            updatedItem.setDescription(itemToUpdate.getDescription());
+        }
+        if (itemToUpdate.getName() != null) {
+            updatedItem.setName(itemToUpdate.getName());
+        }
+        itemStorage.updateItem(updatedItem);
         return ItemMapper.itemToDto(itemStorage.getItemById(itemId));
     }
 
@@ -61,6 +78,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> searchItemByText(String text) {
         List<ItemDto> result = new ArrayList<>();
+        if (text.isEmpty()) {
+            return result;
+        }
         for (Item item : itemStorage.searchItemByText(text)) {
             result.add(ItemMapper.itemToDto(item));
         }

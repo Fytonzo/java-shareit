@@ -1,15 +1,17 @@
-package ru.practicum.shareit.user.service;
+package ru.practicum.shareit.user;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.mapper.UserMapper;
-import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.storage.UserStorage;
+import ru.practicum.shareit.user.interfaces.UserService;
+import ru.practicum.shareit.user.interfaces.UserStorage;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * User service implementation.
+ */
 @Service
 public class UserServiceImpl implements UserService {
 

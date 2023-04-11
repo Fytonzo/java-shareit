@@ -1,8 +1,8 @@
-package ru.practicum.shareit.item.storage;
+package ru.practicum.shareit.item;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.EntityNotFoundException;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.interfaces.ItemStorage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Item in-memory storage.
+ */
 @Component("InMemoryItemStorage")
 public class InMemoryItemStorage implements ItemStorage {
 
@@ -27,21 +30,7 @@ public class InMemoryItemStorage implements ItemStorage {
     @Override
     public Item updateItem(Item item) {
         if (items.containsKey(item.getId())) {
-            Item updatedItem = items.get(item.getId());
-            if ((updatedItem.getOwner().getId()) != (item.getOwner().getId())) {
-                throw new EntityNotFoundException("Пользователь с id = " + updatedItem.getOwner().getId()
-                        + " не владеет такой вещью!");
-            }
-            if (item.getAvailable() != null) {
-                updatedItem.setAvailable(item.getAvailable());
-            }
-            if (item.getDescription() != null) {
-                updatedItem.setDescription(item.getDescription());
-            }
-            if (item.getName() != null) {
-                updatedItem.setName(item.getName());
-            }
-            items.put(updatedItem.getId(), updatedItem);
+            items.put(item.getId(), item);
         } else {
             throw new EntityNotFoundException("Вещи с таким id нет в базе!");
         }
@@ -66,9 +55,6 @@ public class InMemoryItemStorage implements ItemStorage {
     @Override
     public List<Item> searchItemByText(String text) {
         List<Item> result = new ArrayList<>();
-        if (text.isEmpty()) {
-            return result;
-        }
         for (Item item : items.values()) {
             if ((item.getDescription().toLowerCase().contains(text.toLowerCase()) ||
                     item.getName().toLowerCase().contains(text.toLowerCase()))

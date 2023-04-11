@@ -1,12 +1,15 @@
-package ru.practicum.shareit.user.storage;
+package ru.practicum.shareit.user;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.EmailException;
 import ru.practicum.shareit.exception.EntityNotFoundException;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.interfaces.UserStorage;
 
 import java.util.*;
 
+/**
+ * User in-memory storage.
+ */
 @Component("InMemoryUserStorage")
 public class InMemoryUserStorage implements UserStorage {
 

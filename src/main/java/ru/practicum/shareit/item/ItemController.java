@@ -2,13 +2,13 @@ package ru.practicum.shareit.item;
 
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.item.interfaces.ItemService;
 
 import javax.validation.Valid;
 import java.util.List;
 
 /**
- * Item controller
+ * Item controller.
  */
 @RestController
 @RequestMapping("/items")
